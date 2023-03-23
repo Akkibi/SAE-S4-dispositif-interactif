@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"
+      defer
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/handtrackjs/dist/handtrack.min.js"
+      defer
+    ></script>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="./input.css" />
+    <!-- <script src="./hand.js" defer></script> -->
+    <script src="./background.js" defer></script>
+    <script src="./3d.js" type="module" defer></script>
+    <title>Document</title>
+  </head>
+  <body class="m-0 h-screen w-screen overflow-hidden bg-black">
+    <div
+      class="absolute h-full w-full bg-cover bg-center bg-no-repeat opacity-50"
+      id="background-wall"
+    ></div>
+    <div
+      class="absolute h-full w-full origin-bottom scale-90 bg-contain bg-center bg-no-repeat"
+      id="background-painting"
+    ></div>
+    <video
+      id="video"
+      height="100%"
+      width="100%"
+      class="absolute max-h-screen opacity-10"
+      autoplay
+      style="transform: scale(-1, 1)"
+    ></video>
+    <div
+      class="absolute m-0 h-full w-full bg-center bg-no-repeat mix-blend-multiply"
+      id="darker"
+    ></div>
+    <div id="treejs" class="absolute m-0 h-full w-full"></div>
+    <img
+      src="../public/woodhand.png"
+      alt="hand"
+      id="box"
+      class="absolute h-[26.5vw] w-[12vw]"
+    />
+    <img
+      src="../public/tableaux/tableau1.jpg"
+      alt=""
+      class="absolute h-0 w-0"
+    />
+  </body>
+</html>
