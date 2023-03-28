@@ -7,6 +7,7 @@ let isVideo = false;
 let model = null;
 let topCalc = 0;
 let leftCalc = 0;
+let isloaded = false;
 
 // Ajouter un événement de chargement à la fenêtre
 //paramètres model
@@ -30,6 +31,9 @@ window.addEventListener("load", () => {
         // detect objects in the image.
         model = lmodel;
         console.log("Loaded Model!");
+        //change text inside button to "Lancer une partie"
+        isloaded = true;
+        document.getElementById("button").innerText = "Lancer une partie";
         runDetection();
       });
     })

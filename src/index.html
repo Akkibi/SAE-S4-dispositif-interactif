@@ -14,6 +14,7 @@
     ></script>
     <link rel="stylesheet" href="./input.css" />
     <!-- <script src="./hand.js" defer></script> -->
+    <script src="./menu.js" defer></script>
     <script src="./background.js" type="module" defer></script>
     <script src="./3d.js" type="module" defer></script>
     <title>Document</title>
@@ -46,5 +47,36 @@
       id="box"
       class="absolute h-[26.5vw] w-[12vw]"
     />
+    <!-- pop up  affiché au début -->
+    <div id="menu" class="absolute m-0 h-full w-full bg-[rgba(0,0,0,0.5)] px-20 py-10 duration-300 ease-in-out transition rounded-xl hidden">
+      <div class="h-full w-full text-2xl bg-[rgba(255,255,255,0.75)] rounded-lg px-20 py-10 backdrop-blur-md border-t-2 border-l-2 border-white">
+        <div class="w-full">
+          <div class="absolute left-10 w-10 h-10 rounded-full bg-black border-white border-l-2 border-t-2"></div>
+          <div class="absolute right-10 w-10 h-10 rounded-full bg-black border-white border-l-2 border-t-2"></div>
+        </div>
+        <h1  class=" text-center font-serif text-6xl font-black opacity-50">
+        SAVE THE PAINTINGS</h1>
+        <h2 class="text-3xl my-4 font-semibold">Qu'est-ce que Save The Paintings?</h2>
+        <p class="relative left-5">Save the paintings est un jeu interractif ... la partie explication du contexte  Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptas dolores sapiente aliquam expedita dolore enim soluta praesentium, commodi necessitatibus at nobis odit fugiat iste est dicta iusto amet hic sequi?</p>
+        <h2 class="text-3xl my-4 font-semibold">Comment est-ce qu'on y joue?</h2>
+        <p class="relative left-5">Les règles du jeu sont les suivantes:</p>
+        <br>
+        <ul class="list-disc left-20 font-medium relative">
+          <li>Pousser les balles avec la main</li>
+          <li>Ne pas perdre plus de 3 points!!</li>
+          <li>Amusez vous</li>
+        </ul>
+        <h2 class="text-3xl my-4 font-semibold">Tips</h2>
+        <p class="relative left-5">Appuyez sur ESC à tout moment pour arrêter le jeu</p>
+        <button onclick="closeMenu()" id="button" class="absolute bottom-10 left-1/2 -translate-x-1/2 ease-out hover:scale-110 duration-100 bg-black hover:bg-green-900 hover:rotate-2 text-white font-bold py-4 px-8 rounded-lg text-3xl">
+         Chargement...
+        </button>
+        <div class="w-full">
+          <div class="absolute left-10 bottom-10 w-10 h-10 rounded-full bg-black border-white border-l-2 border-t-2"></div>
+          <div class="absolute right-10 bottom-10 w-10 h-10 rounded-full bg-black border-white border-l-2 border-t-2"></div>
+        </div>
+      </div>
+
+    </div>
   </body>
 </html>
