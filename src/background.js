@@ -27,7 +27,7 @@ setBackground();
 function setBackground() {
   bgValue = background[Math.round(randomMinMax(0, 7))];
   // console.log("random: " + bgValue);
-  backgroundPainting.backgroundImage = "url(../public/tableaux/" + bgValue + ".jpg)";
+  backgroundPainting.backgroundImage = "url(/tableaux/" + bgValue + ".jpg)";
 }
 
 function step(number) {

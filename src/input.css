@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 #background-wall {
-  background-image: url("../public/grunge-wall-texture.jpg");
+  background-image: url("/grunge-wall-texture.jpg");
 }
 #darker {
-  background-image: url("../public/edges-gradient-16-9-black.png");
+  background-image: url("/edges-gradient-16-9-black.png");
   background-size: 100% 100%;
 }
