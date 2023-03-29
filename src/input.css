@@ -9,3 +9,11 @@
   background-image: url("/edges-gradient-16-9-black.png");
   background-size: 100% 100%;
 }
+.bg-vis {
+  background: url("/vis.jpg") no-repeat center;
+  background-size: cover;
+}
+.bg-glass {
+  background: url("/backgroundGlass.jpg") no-repeat center;
+  background-size: cover;
+}

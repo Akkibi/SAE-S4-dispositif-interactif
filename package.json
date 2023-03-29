@@ -14,6 +14,8 @@
     "three": "^0.150.1"
   },
   "devDependencies": {
+    "prettier": "^2.8.2",
+    "prettier-plugin-tailwindcss": "^0.2.1",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react": "^3.1.0",

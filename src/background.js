@@ -24,7 +24,7 @@ function randomMinMax(min, max) {
 }
 setBackground();
 
-function setBackground() {
+export function setBackground() {
   bgValue = background[Math.round(randomMinMax(0, 7))];
   // console.log("random: " + bgValue);
   backgroundPainting.backgroundImage = "url(/tableaux/" + bgValue + ".jpg)";
