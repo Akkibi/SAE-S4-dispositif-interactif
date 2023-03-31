@@ -1,16 +1,13 @@
-// console.log("start");
-
 // const video = document.getElementById("video");
 // const box = document.getElementById("box").style;
-// let pauseHand = false;
 // let isVideo = false;
 // let model = null;
 // let topCalc = 0;
 // let leftCalc = 0;
 // let isloaded = false;
 
-// // Ajouter un événement de chargement à la fenêtre
-// //paramètres model
+// Ajouter un événement de chargement à la fenêtre
+//paramètres model
 // const modelParams = {
 //   flipHorizontal: true, // retourner l'image horizontalement
 //   imageScaleFactor: 0.5, // réduire la taille de l'image pour la détection
@@ -32,51 +29,12 @@
 //         model = lmodel;
 //         console.log("Loaded Model!");
 //         //change text inside button to "Lancer une partie"
-//         isloaded = true;
 //         document.getElementById("button").innerText = "Lancer une partie";
-//         runDetection();
+//         isloaded = true;
 //       });
 //     })
 //     .catch((error) => {
 //       console.log("MyErreur :", error);
 //     });
 // });
-
-// Initialiser le détecteur de main
-
-//detection de la main et modification de la position
-// function runDetection() {
-//   if (pauseHand) {
-//     return;
-//   }
-//   model.detect(video).then((predictions) => {
-//     if (predictions.length != 0 && predictions[0].label != "face") {
-//       // console.log(predictions);
-//       topCalc = Math.round(
-//         (window.innerHeight / 100) *
-//           (predictions[0].bbox[1] + predictions[0].bbox[2] / 2)
-//       );
-//       leftCalc = Math.round((window.innerWidth / 100) * predictions[0].bbox[0]);
-//       // -------------------------------------------------------------------------------------
-//       gsap.to("#box", {
-//         y: topCalc,
-//         x: leftCalc,
-//         duration: 0.2,
-//       });
-//     }
-//     requestAnimationFrame(runDetection);
-//   });
-// }
-
-// document.addEventListener("keydown", (e) => {
-//   if (e.key == " ") {
-//     if (pauseHand == true) {
-//       pauseHand = false;
-//       console.log("c'est repartis");
-//       runDetection();
-//     } else {
-//       pauseHand = true;
-//       console.log("pause");
-//     }
-//   }
-// });
+//end load hand model

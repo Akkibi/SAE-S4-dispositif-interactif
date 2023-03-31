@@ -30,10 +30,10 @@ export function setBackground() {
   backgroundPainting.backgroundImage = "url(/tableaux/" + bgValue + ".jpg)";
 }
 
-function step(number) {
+export function step(number) {
   rotateValue = randomMinMax(-number, number);
   gsap.to("#background-painting", {
-    rotation: rotateValue,
+    rotation: rotateValue / 3,
     y: number * 3,
     x: 0,
     duration: 1,
