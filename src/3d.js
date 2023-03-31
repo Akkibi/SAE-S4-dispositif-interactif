@@ -16,6 +16,7 @@ const minZ = -10;
 var intervalID = null;
 var paused = true;
 var menu = document.getElementById("menu");
+var score = 0;
 
 const renderer = new THREE.WebGLRenderer({ alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -161,6 +162,9 @@ function animate() {
             document.getElementById("vies").innerHTML =
               "OUPS, elle à été oubliée";
           }
+        } else {
+          score += 13;
+          document.getElementById("score").innerHTML = score + "!";
         }
       } else {
         child.rotation.x += (child.position.z - minZ) * 0.005;
@@ -288,6 +292,8 @@ export function closeMenu() {
       setBackground();
       step(0);
       pv = 3;
+      score = 0;
+      document.getElementById("score").innerHTML = score;
       document.getElementById("vies").innerHTML = pv;
     }, "500");
     menu.style.transform = null;
