@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { Group } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { setBackground } from "./background.js";
 import { step } from "./background.js";
@@ -39,36 +38,13 @@ scene.add(light);
 camera.position.z = 5;
 var ball = undefined;
 
-// gltf loader
-// const loader = new GLTFLoader();
-// function createBall(url) {
-//   // Load a glTF resource
-//   loader.load(url, (gltf) => {
-//     console.log("gltf: ", gltf);
-//     ball = gltf.scene.children[0]; // access the ball object
-//     console.log("ball: ", ball);
-//     scene.add(ball);
-//     // ball.scale.set(0.15, 0.15, 0.15);
-//     // ball.position.set(posx, posy, 0);
-//     ball.position.x = randomMinMax(-4, 4);
-//     ball.position.y = randomMinMax(-8, -4);
-//     ball.position.z = 4;
-//     gsap.to(ball.position, {
-//       x: randomMinMax(-6, 6),
-//       y: ball.position.x,
-//       z: minZ - 0.25,
-//       ease: "circ",
-//       duration: 3,
-//     });
-//   });
-// }
 const loader = new GLTFLoader();
 function createBall(url) {
   // Load a glTF resource
   loader.load(url, (gltf) => {
-    console.log("gltf: ", gltf);
+    // console.log("gltf: ", gltf);
     ball = gltf.scene.children[0]; // access the ball object
-    console.log("ball: ", ball);
+    // console.log("ball: ", ball);
     scene.add(ball);
     // ball.scale.set(0.15, 0.15, 0.15);
     // ball.position.set(posx, posy, 0);
@@ -98,25 +74,25 @@ function createBall(url) {
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 
-function onPointerMove(event) {
-  // calculate pointer position in normalized device coordinates
-  // (-1 to +1) for both components
-  // console.log(
-  //   (event.clientX / window.innerWidth) * 2 - 1,
-  //   (event.clientY / window.innerHeight) * 2 + 1
-  // );
-  // console.log(topCalc, event.clientY);
-  // console.log(leftCalc, event.clientX);
-  gsap.to("#mouse", {
-    y: event.clientY,
-    x: event.clientX,
-    duration: 0.2,
-  });
-  pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-  pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
-  // console.log("MOUSE left: ", event.clientX, "top: ", event.clientY);
-}
-window.addEventListener("pointermove", onPointerMove);
+// function onPointerMove(event) {
+//   // calculate pointer position in normalized device coordinates
+//   // (-1 to +1) for both components
+//   // console.log(
+//   //   (event.clientX / window.innerWidth) * 2 - 1,
+//   //   (event.clientY / window.innerHeight) * 2 + 1
+//   // );
+//   // console.log(topCalc, event.clientY);
+//   // console.log(leftCalc, event.clientX);
+//   gsap.to("#mouse", {
+//     y: event.clientY,
+//     x: event.clientX,
+//     duration: 0.2,
+//   });
+//   pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+//   pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+//   // console.log("MOUSE left: ", event.clientX, "top: ", event.clientY);
+// }
+// window.addEventListener("pointermove", onPointerMove);
 
 //debug scene
 // document.getElementById("box").addEventListener("click", function () {
@@ -125,23 +101,59 @@ window.addEventListener("pointermove", onPointerMove);
 
 var isDead = true;
 var pv = 3;
-// gfdshjsgdf
-// shufdsf
-// fdsgfjsdfsd
-// fdshfdhufshkf
 
-document.getElementById("mouse").addEventListener("click", function () {
-  if (isDead) {
-    isDead = false;
-    console.log("ded");
-  } else {
-    isDead = true;
-    console.log("not");
-  }
-});
+// document.getElementById("mouse").addEventListener("click", function () {
+//   if (isDead) {
+//     isDead = false;
+//     console.log("ded");
+//   } else {
+//     isDead = true;
+//     console.log("not");
+//   }
+// });
 //load hand model
 console.log("start");
 //end load hand model
+
+const video = document.getElementById("video");
+const box = document.getElementById("box").style;
+let isVideo = false;
+let model = null;
+let topCalc = 0;
+let leftCalc = 0;
+let isloaded = false;
+
+// Ajouter un événement de chargement à la fenêtre
+// paramètres model
+const modelParams = {
+  flipHorizontal: true, // retourner l'image horizontalement
+  imageScaleFactor: 0.5, // réduire la taille de l'image pour la détection
+  maxNumBoxes: 1, // détecter une seule main
+  iouThreshold: 0.5, // seuil de recouvrement pour la détection des boîtes englobantes
+  scoreThreshold: 0.7, // seuil de confiance pour la détection des boîtes englobantes
+};
+
+window.addEventListener("load", () => {
+  // Lancer la webcam
+  navigator.mediaDevices
+    .getUserMedia({ video: true })
+    .then((stream) => {
+      // Assigner le flux vidéo à l'élément video
+      video.srcObject = stream;
+      isVideo = true;
+      handTrack.load(modelParams).then((lmodel) => {
+        // detect objects in the image.
+        model = lmodel;
+        console.log("Loaded Model!");
+        //change text inside button to "Lancer une partie"
+        document.getElementById("button").innerText = "Lancer une partie";
+        isloaded = true;
+      });
+    })
+    .catch((error) => {
+      console.log("MyErreur :", error);
+    });
+});
 
 var intersects = [];
 function animate() {
@@ -156,21 +168,6 @@ function animate() {
     if (child.type == "Group") {
       if (child.position.z <= minZ) {
         scene.remove(child);
-        if (isDead) {
-          pv -= 1;
-          step((3 - pv) * 75);
-          console.log(pv);
-          console.log((3 - pv) * 75);
-          document.getElementById("vies").innerHTML = pv;
-          if (pv <= 0) {
-            clearInterval(intervalID);
-            document.getElementById("vies").innerHTML =
-              "OUPS, elle à été oubliée";
-          }
-        } else {
-          score += 13;
-          document.getElementById("score").innerHTML = score + "!";
-        }
       } else {
         child.rotation.x += (child.position.z - minZ) * 0.005;
         child.rotation.y += (child.position.z - minZ) * 0.005;
@@ -187,92 +184,29 @@ function animate() {
       // console.log(intersects[i]);
     }
     // );
-    // const video = document.getElementById("video");
-    // const box = document.getElementById("box").style;
-    // let isVideo = false;
-    // let model = null;
-    // let topCalc = 0;
-    // let leftCalc = 0;
-    // let isloaded = false;
-
-    // Ajouter un événement de chargement à la fenêtre
-    // paramètres model
-    // const modelParams = {
-    //   flipHorizontal: true, // retourner l'image horizontalement
-    //   imageScaleFactor: 0.5, // réduire la taille de l'image pour la détection
-    //   maxNumBoxes: 1, // détecter une seule main
-    //   iouThreshold: 0.5, // seuil de recouvrement pour la détection des boîtes englobantes
-    //   scoreThreshold: 0.7, // seuil de confiance pour la détection des boîtes englobantes
-    // };
-
-    // window.addEventListener("load", () => {
-    //   // Lancer la webcam
-    //   navigator.mediaDevices
-    //     .getUserMedia({ video: true })
-    //     .then((stream) => {
-    //       // Assigner le flux vidéo à l'élément video
-    //       video.srcObject = stream;
-    //       isVideo = true;
-    //       handTrack.load(modelParams).then((lmodel) => {
-    //         // detect objects in the image.
-    //         model = lmodel;
-    //         console.log("Loaded Model!");
-    //         //change text inside button to "Lancer une partie"
-    //         document.getElementById("button").innerText = "Lancer une partie";
-    //         isloaded = true;
-    //       });
-    //     })
-    //     .catch((error) => {
-    //       console.log("MyErreur :", error);
-    //     });
-    // });
-    //end load hand model
-
-    window.addEventListener("load", () => {
-      // Lancer la webcam
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then((stream) => {
-          // Assigner le flux vidéo à l'élément video
-          video.srcObject = stream;
-          isVideo = true;
-          handTrack.load(modelParams).then((lmodel) => {
-            // detect objects in the image.
-            model = lmodel;
-            console.log("Loaded Model!");
-            //change text inside button to "Lancer une partie"
-            document.getElementById("button").innerText = "Lancer une partie";
-            isloaded = true;
-          });
-        })
-        .catch((error) => {
-          console.log("MyErreur :", error);
-        });
-    });
-    //end load hand model
-
-    //move hand picture and get position
-    // model.detect(video).then((predictions) => {
-    //   if (predictions.length != 0 && predictions[0].label != "face") {
-    //     // console.log(predictions);
-    //     topCalc = Math.round(
-    //       (window.innerHeight / 100) *
-    //         (predictions[0].bbox[1] + predictions[0].bbox[2] / 2)
-    //     );
-    //     leftCalc = Math.round((window.innerWidth / 100) * predictions[0].bbox[0]);
-    //     pointer.x = (leftCalc / window.innerWidth) * 2 - 1;
-    //     pointer.y = (topCalc / window.innerHeight) * 2 + 1;
-    //     // box.left = leftCalc;
-    //     // box.top = topCalc;
-    //     gsap.to("#box", {
-    //       y: topCalc,
-    //       x: leftCalc,
-    //       // x: predictions[0].bbox[0],
-    //       // y: predictions[0].bbox[1],
-    //       duration: 0.2,
-    //     });
-    //     console.log(pointer.x, pointer.y);
-    //   }
+  });
+  //move hand picture and get position
+  model.detect(video).then((predictions) => {
+    if (predictions.length != 0 && predictions[0].label != "face") {
+      // console.log(predictions);
+      topCalc = Math.round(
+        (window.innerHeight / 100) *
+          (predictions[0].bbox[1] + predictions[0].bbox[2] / 2)
+      );
+      leftCalc = Math.round((window.innerWidth / 100) * predictions[0].bbox[0]);
+      pointer.x = (leftCalc / window.innerWidth) * 2 - 1;
+      pointer.y = (topCalc / window.innerHeight) * 2 + 1;
+      // box.left = leftCalc;
+      // box.top = topCalc;
+      gsap.to("#box", {
+        y: topCalc,
+        x: leftCalc,
+        // x: predictions[0].bbox[0],
+        // y: predictions[0].bbox[1],
+        duration: 0.2,
+      });
+      // console.log(pointer.x, pointer.y);
+    }
     //   // end move hand picture and get position
   });
   renderer.render(scene, camera);
