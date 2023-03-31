@@ -216,9 +216,8 @@ animate();
 
 //start gestion du menu
 export function closeMenu() {
-  if (paused) {
-    // if (paused && isloaded) {
-    // if (paused) {
+  // if (paused) {
+  if (paused && isloaded) {
     menu.style.transform = "translateY(100vh) scale(0.5)";
     paused = false;
     console.log("close menu");
@@ -257,9 +256,3 @@ document.addEventListener("keydown", function (event) {
 document.getElementById("button").addEventListener("click", () => {
   closeMenu();
 });
-
-// DONE * problem de rapidité apres la réouverture du menu mais bon..
-// DONE * toujours pas d'icon
-// MID * pas de raycast
-// * pas d'animation de ball poussée
-// * pas de statistiques (points de vie et points gagnés)
