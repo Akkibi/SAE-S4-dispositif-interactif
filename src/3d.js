@@ -122,8 +122,13 @@ window.addEventListener("pointermove", onPointerMove);
 // document.getElementById("box").addEventListener("click", function () {
 //   console.log(scene.children);
 // });
+
 var isDead = true;
 var pv = 3;
+// gfdshjsgdf
+// shufdsf
+// fdsgfjsdfsd
+// fdshfdhufshkf
 
 document.getElementById("mouse").addEventListener("click", function () {
   if (isDead) {
