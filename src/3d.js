@@ -223,27 +223,28 @@ function animate() {
     // });
     //end load hand model
 
-    window.addEventListener("load", () => {
-      // Lancer la webcam
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then((stream) => {
-          // Assigner le flux vidéo à l'élément video
-          video.srcObject = stream;
-          isVideo = true;
-          handTrack.load(modelParams).then((lmodel) => {
-            // detect objects in the image.
-            model = lmodel;
-            console.log("Loaded Model!");
-            //change text inside button to "Lancer une partie"
-            document.getElementById("button").innerText = "Lancer une partie";
-            isloaded = true;
-          });
-        })
-        .catch((error) => {
-          console.log("MyErreur :", error);
-        });
-    });
+    // window.addEventListener("load", () => {
+    //   // Lancer la webcam
+    //   navigator.mediaDevices
+    //     .getUserMedia({ video: true })
+    //     .then((stream) => {
+    //       // Assigner le flux vidéo à l'élément video
+    //       video.srcObject = stream;
+    //       isVideo = true;
+    //       handTrack.load(modelParams).then((lmodel) => {
+    //         // detect objects in the image.
+    //         model = lmodel;
+    //         console.log("Loaded Model!");
+    //         //change text inside button to "Lancer une partie"
+    //         document.getElementById("button").innerText =
+    //           "Commencer une partie";
+    //         isloaded = true;
+    //       });
+    //     })
+    //     .catch((error) => {
+    //       console.log("MyErreur :", error);
+    //     });
+    // });
     //end load hand model
 
     //move hand picture and get position
@@ -318,9 +319,3 @@ document.addEventListener("keydown", function (event) {
 document.getElementById("button").addEventListener("click", () => {
   closeMenu();
 });
-
-// DONE * problem de rapidité apres la réouverture du menu mais bon..
-// DONE * toujours pas d'icon
-// MID * pas de raycast
-// * pas d'animation de ball poussée
-// * pas de statistiques (points de vie et points gagnés)
