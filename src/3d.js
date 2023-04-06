@@ -1,10 +1,7 @@
 import * as THREE from "three";
-import { Group } from "three";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { setBackground } from "./background.js";
 import { step } from "./background.js";
 
-var ballUrl = "/balls/beach-ball.gltf";
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   75,
@@ -17,6 +14,7 @@ var intervalID = null;
 var paused = true;
 var menu = document.getElementById("menu");
 var score = 0;
+var pv = 3;
 
 const renderer = new THREE.WebGLRenderer({ alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -36,61 +34,47 @@ const light = new THREE.PointLight(0xffffff, 1.1, 100);
 light.position.set(-5, 5, -2);
 scene.add(light);
 
-camera.position.z = 5;
-var ball = undefined;
+const ballList = [
+  "./balls/tennis.jpg",
+  "./balls/baseball.jpg",
+  "./balls/volley.jpg",
+  "./balls/football.jpg",
+  "./balls/balldimpled.png",
+];
 
-// gltf loader
-// const loader = new GLTFLoader();
-// function createBall(url) {
-//   // Load a glTF resource
-//   loader.load(url, (gltf) => {
-//     console.log("gltf: ", gltf);
-//     ball = gltf.scene.children[0]; // access the ball object
-//     console.log("ball: ", ball);
-//     scene.add(ball);
-//     // ball.scale.set(0.15, 0.15, 0.15);
-//     // ball.position.set(posx, posy, 0);
-//     ball.position.x = randomMinMax(-4, 4);
-//     ball.position.y = randomMinMax(-8, -4);
-//     ball.position.z = 4;
-//     gsap.to(ball.position, {
-//       x: randomMinMax(-6, 6),
-//       y: ball.position.x,
-//       z: minZ - 0.25,
-//       ease: "circ",
-//       duration: 3,
-//     });
-//   });
-// }
-const loader = new GLTFLoader();
-function createBall(url) {
-  // Load a glTF resource
-  loader.load(url, (gltf) => {
-    console.log("gltf: ", gltf);
-    ball = gltf.scene.children[0]; // access the ball object
-    console.log("ball: ", ball);
-    scene.add(ball);
-    // ball.scale.set(0.15, 0.15, 0.15);
-    // ball.position.set(posx, posy, 0);
-    ball.position.x = randomMinMax(-4, 4);
-    ball.position.y = randomMinMax(-8, -4);
-    ball.position.z = 4;
-    gsap.to(ball.position, {
-      x: randomMinMax(-6, 6),
-      y: ball.position.x,
-      z: minZ - 0.25,
-      ease: "circ",
-      duration: 3,
-    });
+camera.position.z = 5;
+
+let ballCount = 0;
+const geometry = new THREE.SphereGeometry(15, 32, 16);
+const textureLoader = new THREE.TextureLoader();
+var texture = {};
+var material = {};
+
+function createBall() {
+  let type = Math.round(randomMinMax(0, 4));
+  texture = textureLoader.load(ballList[type]);
+  material = new THREE.MeshStandardMaterial({
+    map: texture,
+    roughness: 0.5,
+  });
+  const ball = new THREE.Mesh(geometry, material);
+  scene.add(ball);
+  ball.name = ballCount;
+  ballCount += 1;
+  console.log("ball: ", ball.name);
+  ball.position.x = randomMinMax(-6, 6);
+  ball.position.y = randomMinMax(-6, 6);
+  ball.position.z = minZ - 0.25;
+  ball.dead = false;
+  ball.scale.set(type * 0.025 + 0.05, type * 0.025 + 0.05, type * 0.025 + 0.05);
+  gsap.from(ball.position, {
+    x: randomMinMax(-10, 10),
+    y: randomMinMax(-10, -6),
+    z: 4,
+    ease: "circ.out",
+    duration: type * 0.25 + 1.5,
   });
 }
-// const geometry = new THREE.SphereGeometry( 15, 32, 16 );
-// const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-// function createBall(url) {
-//   const sphere = new THREE.Mesh( geometry, material );
-//   //add a texture
-//   scene.add( sphere );
-// }
 
 //end gltf loader
 
@@ -122,21 +106,6 @@ window.addEventListener("pointermove", onPointerMove);
 // document.getElementById("box").addEventListener("click", function () {
 //   console.log(scene.children);
 // });
-var isDead = true;
-var pv = 3;
-
-document.getElementById("mouse").addEventListener("click", function () {
-  if (isDead) {
-    isDead = false;
-    console.log("ded");
-  } else {
-    isDead = true;
-    console.log("not");
-  }
-});
-//load hand model
-console.log("start");
-//end load hand model
 
 var intersects = [];
 function animate() {
@@ -148,23 +117,24 @@ function animate() {
   //animate only balls
 
   scene.children.forEach((child) => {
-    if (child.type == "Group") {
-      if (child.position.z <= minZ) {
+    if (child.type == "Mesh") {
+      if (child.position.z <= minZ && child.dead == false) {
         scene.remove(child);
-        if (isDead) {
-          pv -= 1;
-          step((3 - pv) * 75);
-          console.log(pv);
-          console.log((3 - pv) * 75);
-          document.getElementById("vies").innerHTML = pv;
-          if (pv <= 0) {
-            clearInterval(intervalID);
-            document.getElementById("vies").innerHTML =
-              "OUPS, elle à été oubliée";
-          }
-        } else {
-          score += 13;
-          document.getElementById("score").innerHTML = score + "!";
+        pv -= 1;
+        step((3 - pv) * 75);
+        console.log(pv);
+        console.log((3 - pv) * 75);
+        document.getElementById("vies").innerHTML = pv;
+        if (pv <= 0) {
+          clearInterval(intervalID);
+          document.getElementById("vies").innerHTML =
+            "OUPS, elle a été oubliée";
+          document.getElementById("popup").style.display = "block";
+          document.getElementById("endScore").innerHTML = score;
+          gsap.from("#popup", {
+            opacity: 0,
+            duration: 1,
+          });
         }
       } else {
         child.rotation.x += (child.position.z - minZ) * 0.005;
@@ -178,8 +148,20 @@ function animate() {
     // calculate objects intersecting the picking ray
     // const intersects = raycaster.intersectObjects("group", true);
     for (let i = 0; i < intersects.length; i++) {
-      intersects[i].object.position.z += 1;
-      // console.log(intersects[i]);
+      if (intersects[i].object.dead == false) {
+        score += 13;
+        document.getElementById("score").innerHTML = score;
+        intersects[i].object.dead = true;
+        gsap.to(intersects[i].object.position, {
+          x: randomMinMax(-10, 10),
+          y: -10,
+          z: 0,
+          ease: "back.in(1.7)",
+          duration: 0.35,
+          onCompleteParams: [intersects[i].object],
+          onComplete: deleteObject,
+        });
+      }
     }
     // );
     // const video = document.getElementById("video");
@@ -276,6 +258,10 @@ function animate() {
 
 animate();
 
+function deleteObject(object) {
+  scene.remove(object);
+}
+
 //start gestion du menu
 export function closeMenu() {
   if (paused) {
@@ -286,8 +272,8 @@ export function closeMenu() {
     console.log("close menu");
     animate();
     intervalID = setInterval(function () {
-      createBall(ballUrl);
-    }, 2000);
+      createBall();
+    }, 1500);
   } else {
     setTimeout(() => {
       setBackground();
