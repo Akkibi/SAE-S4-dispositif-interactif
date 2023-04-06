@@ -276,6 +276,7 @@ export function closeMenu() {
     }, 1500);
   } else {
     setTimeout(() => {
+      document.getElementById("popup").style.display = null;
       setBackground();
       step(0);
       pv = 3;

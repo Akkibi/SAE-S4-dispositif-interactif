@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"
+      defer
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/handtrackjs/dist/handtrack.min.js"
+      defer
+    ></script>
+    
+    <!-- <script src="./src/hand.js" type="module" defer></script> -->
+    
+    
+    <title>Document</title>
+    <link rel="icon" type="image/x-icon" href="/assets/visage-c76307b8.ico" />
+    <script type="module" crossorigin src="/assets/app-179e1e0d.js"></script>
+    <link rel="stylesheet" href="/assets/index-371c5de7.css">
+  </head>
+  <body class="m-0 h-screen w-screen overflow-hidden bg-black">
+    <div
+      class="absolute h-full w-full bg-cover bg-center bg-no-repeat opacity-50"
+      id="background-wall"
+    ></div>
+    <div
+      class="absolute h-full w-full origin-bottom scale-90 bg-contain bg-center bg-no-repeat"
+      id="background-painting"
+    ></div>
+    <video
+      id="video"
+      height="100%"
+      width="100%"
+      class="absolute max-h-screen opacity-10"
+      autoplay
+      style="transform: scale(-1, 1)"
+    ></video>
+    <div
+      class="absolute m-0 h-full w-full bg-center bg-no-repeat mix-blend-multiply"
+      id="darker"
+    ></div>
+    <div id="treejs" class="absolute m-0 h-full w-full"></div>
+    <!-- <img
+      src="./woodhand.png"
+      alt="hand"
+      id="box"
+      class="absolute h-[19.875vw] w-[9vw] -translate-x-1/2 -translate-y-1/2 scale-50"
+    /> -->
+    <img
+      src="./woodhand.png"
+      alt="hand"
+      id="mouse"
+      class="absolute h-[19.875vw] w-[9vw] -translate-x-1/2 -translate-y-1/2"
+    />
+    <p class="absolute p-5 text-white">
+      Score : <span class="text-2xl" id="score">0</span>
+    </p>
+    <p class="absolute left-1/2 p-5 text-left text-white">
+      Vies : <span id="vies" class="text-2xl">3</span>
+    </p>
+    <!-- resume -->
+    <div
+      id="popup"
+      class="bg-glass absolute top-1/2 left-1/2 hidden -translate-x-1/2 -translate-y-1/2 rounded-lg border-t-2 border-l-2 border-[rgba(255,255,255,0.85)] px-20 py-10"
+    >
+      <h1 class="text-center font-serif text-7xl opacity-50">SCORE:</h1>
+      <p id="endScore" class="text-center font-mono text-9xl">0</p>
+    </div>
+    <!-- endresume -->
+    <div
+      id="menu"
+      class="absolute m-0 h-full w-full rounded-xl bg-[rgba(0,0,0,0.5)] px-20 py-10 backdrop-blur-md transition duration-300 ease-in-out"
+    >
+      <section
+        class="bg-glass h-full w-full rounded-lg border-t-2 border-l-2 border-[rgba(255,255,255,0.85)] px-20 py-10 font-sans text-2xl opacity-80 backdrop-blur-0"
+      >
+        <div class="h-10 w-full">
+          <div
+            class="bg-vis absolute left-10 h-10 w-10 rounded-full border-l-2 border-t-2 border-[rgba(255,255,255,0.85)]"
+          ></div>
+          <div
+            class="bg-vis absolute right-10 h-10 w-10 rounded-full border-l-2 border-t-2 border-[rgba(255,255,255,0.85)]"
+          ></div>
+        </div>
+        <h1
+          class="text-center font-serif text-6xl font-black opacity-50 drop-shadow-smallWhite"
+        >
+          SAVE THE PAINTINGS
+        </h1>
+        <h2 class="my-2 font-serif text-3xl font-bold drop-shadow-smallWhite">
+          Qu'est-ce que Save The Paintings?
+        </h2>
+        <p class="relative left-5 drop-shadow-smallWhite">
+          Le Dream Gallery présente un jeu interactif nommé
+          <b>"Save the paintings"</b> lors de l'exposition
+          <b>"les femmes peintres"</b> . Le jeu utilise la <b>caméra</b> de
+          l'ordinateur pour suivre les mouvements de la main et le but est d'<b
+            >empêcher des balles de toucher les huit tableaux présentés</b
+          >. Le joueur a <b>trois vies</b> pour éviter que les balles ne
+          frappent les tableaux. Le thème central de l'approche est la mise en
+          lumière des femmes peintres, souvent mise à l'épreuve dans l'histoire
+          de l'art.
+        </p>
+        <hr class="my-5 border-black" />
+        <h2 class="my-2 font-serif text-3xl font-bold drop-shadow-smallWhite">
+          Comment est-ce qu'on y joue ?
+        </h2>
+        <p class="relative left-5 drop-shadow-smallWhite">
+          Les règles du jeu sont les suivantes :
+        </p>
+        <ul
+          class="relative left-20 list-disc font-medium drop-shadow-smallWhite"
+        >
+          <li>
+            Pousser les balles en bougeant votre main au-dessus de votre caméra
+          </li>
+          <li>Essayez de faire le meilleur score</li>
+          <li>Ne pas perdre plus de 3 points !!</li>
+          <li>Amusez-vous</li>
+        </ul>
+        <hr class="my-5 border-black" />
+        <h2 class="my-2 font-serif text-3xl font-bold drop-shadow-smallWhite">
+          Tips
+        </h2>
+        <p class="relative left-5 drop-shadow-smallWhite">
+          Appuyez sur ESC à tout moment pour arrêter le jeu
+        </p>
+        <button
+          id="button"
+          class="absolute bottom-10 left-1/2 -translate-x-1/2 rounded-lg bg-black py-4 px-8 text-3xl font-bold text-white drop-shadow-[10px_10px_20px_rgba(0,0,0,1)] duration-100 ease-out hover:rotate-2 hover:scale-110 hover:bg-green-900 hover:drop-shadow-[20px_20px_40px_rgba(0,0,0,1)]"
+        >
+          <!-- Chargement... -->
+          Commencer le jeu
+        </button>
+        <div class="h-10 w-full">
+          <div
+            class="bg-vis absolute left-10 bottom-10 h-10 w-10 rounded-full border-l-2 border-t-2 border-[rgba(255,255,255,0.85)]"
+          ></div>
+          <div
+            class="bg-vis absolute right-10 bottom-10 h-10 w-10 rounded-full border-l-2 border-t-2 border-[rgba(255,255,255,0.85)]"
+          ></div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
